@@ -1,0 +1,21 @@
+// Get selection
+string $constrained_obj[] = `ls -sl`;
+// Create locator to match position of constrained object
+string $loc[] = `spaceLocator`;
+// Align the locator to the constrained object by creating a parent constraint,
+// then immeidately deleting it
+delete `parentConstraint $constrained_obj[0] $loc[0]`;
+// Find current time
+float $current_time = `currentTime -q`;
+// Create a variable for one frame after current
+float $current_time_plus = $current_time + 1;
+// Keyframe the constrained object
+setKeyframe $constrained_obj[0];
+// Move forward one frame
+currentTime $current_time_plus;
+//Align the constrained object back to the locator to prevent snapping with a temp parent constraint
+string $parent_cns_obj[] = `parentConstraint $loc[0] $constrained_obj[0]`;
+//Keyframe constrained object
+setKeyframe $constrained_obj[0];
+//Delete the temporary constraint and locator
+delete $parent_cns_obj[0]; delete $loc[0];
